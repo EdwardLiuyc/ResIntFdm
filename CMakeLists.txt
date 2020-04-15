@@ -29,4 +29,5 @@ enable_testing()
 add_subdirectory(third_parties/googletest)
 add_subdirectory(tests)
 
-add_executable(fdm meb.cc image_loader.cc main.cc)
+file(GLOB srcs "*.cc" ) 
+add_executable(fdm ${srcs})
