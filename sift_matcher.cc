@@ -1,5 +1,7 @@
 #include "sift_matcher.hpp"
 
+#include <chrono>
+
 namespace fdm {
 
 SiftMatcher::SiftMatcher()
@@ -9,8 +11,14 @@ SiftMatcher::SiftMatcher()
 void SiftMatcher::Match(const std::shared_ptr<Frame>& frame1,
                         const std::shared_ptr<Frame>& frame2) {
   std::vector<std::vector<cv::DMatch> > knn_matches;
+  const auto start = std::chrono::high_resolution_clock::now();
   matcher_->knnMatch(frame1->Descriptor(), frame2->Descriptor(), knn_matches,
                      2);
+  const auto end = std::chrono::high_resolution_clock::now();
+  int64_t duration =
+      std::chrono::duration_cast<std::chrono::microseconds>(end - start)
+          .count();
+  std::cout << duration << " us" << std::endl;
   //-- Filter matches using the Lowe's ratio test
   const float ratio_thresh = 0.7f;
   std::vector<cv::DMatch> lowe_filtered_matches;

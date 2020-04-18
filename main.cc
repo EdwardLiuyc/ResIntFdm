@@ -7,9 +7,17 @@
 #include <opencv2/xfeatures2d/nonfree.hpp>
 #include "map.hpp"
 
+#ifdef _USE_CUDA_
+#include "third_parties/CudaSift/cudaSift.h"
+#endif
+
 int main(int argc, char** argv) {
   fdm::ImageLoader loader("/mnt/Data/sfm/lund_cath_small/Cathedral", ".jpg");
   std::string image_file;
+
+#ifdef _USE_CUDA_
+  InitCuda(0);
+#endif
 
   auto sift_detector = cv::xfeatures2d::SiftFeatureDetector::create(3000);
   fdm::Map map;
