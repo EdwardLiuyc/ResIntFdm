@@ -3,6 +3,7 @@
 
 #include <Eigen/Eigen>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include "frame.hpp"
 #include "sift_matcher.hpp"
@@ -11,15 +12,19 @@ namespace fdm {
 
 struct MapPoint {
   Eigen::Vector3d point;
-  std::vector<std::pair<int, int>> connected_frames_and_point;
+  std::unordered_map<int, int> connected_frames_and_point;
 };
 
 class Map {
  public:
   Map() {}
-  ~Map() = default;
+  ~Map();
 
   void InsertNewFrame(const cv::Mat& image);
+
+  void UpdateConnection(const std::shared_ptr<Frame> frame1,
+                        const std::shared_ptr<Frame>& frame2,
+                        const std::vector<cv::DMatch>& matches);
 
  private:
   std::vector<std::shared_ptr<Frame>> frames_;

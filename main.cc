@@ -1,5 +1,6 @@
 #include "image_loader.hpp"
 
+#include <glog/logging.h>
 #include <iostream>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -12,6 +13,12 @@
 #endif
 
 int main(int argc, char** argv) {
+  google::InitGoogleLogging(argv[0]);
+  google::InstallFailureSignalHandler();
+
+  FLAGS_alsologtostderr = true;
+  FLAGS_colorlogtostderr = true;
+
   fdm::ImageLoader loader("/mnt/Data/sfm/lund_cath_small/Cathedral", ".jpg");
   std::string image_file;
 

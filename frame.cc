@@ -10,7 +10,7 @@ namespace fdm {
 
 constexpr int kKeyPointsNum = 3000;
 
-Frame::Frame(const cv::Mat& image, Map* const map) : map_(map) {
+Frame::Frame(const cv::Mat& image, const int32_t id) : id_(id) {
   image.copyTo(image_);
 
 #ifdef _USE_CUDA_
@@ -79,14 +79,6 @@ Frame::Frame(const cv::Mat& image, Map* const map) : map_(map) {
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
     cv::imshow("sift", image_with_sift);
     cv::waitKey(1);
-  }
-}
-
-void Frame::UpdateConnection(const std::vector<cv::DMatch>& matches,
-                             int target_frame_index) {
-  for (const auto& match : matches) {
-    connections_[match.queryIdx].emplace_back(target_frame_index,
-                                              match.trainIdx);
   }
 }
 
