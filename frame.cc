@@ -6,7 +6,7 @@ namespace fdm {
 
 constexpr int kKeyPointsNum = 3000;
 
-Frame::Frame(const cv::Mat& image) {
+Frame::Frame(const cv::Mat& image, Map* const map) : map_(map) {
   image.copyTo(image_);
   auto sift_detector =
       cv::xfeatures2d::SiftFeatureDetector::create(kKeyPointsNum);

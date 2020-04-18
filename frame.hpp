@@ -6,9 +6,10 @@
 #include "global_configs.hpp"
 
 namespace fdm {
+class Map;
 class Frame {
  public:
-  Frame(const cv::Mat& image);
+  Frame(const cv::Mat& image, Map* const map);
 
   inline const cv::Mat& Image() { return image_; }
   inline const cv::Mat& Descriptor() const { return descriptors_; }
@@ -20,6 +21,7 @@ class Frame {
                         int target_frame_index);
 
  private:
+  Map* map_;
   cv::Mat image_;
   cv::Mat descriptors_;
   std::vector<cv::KeyPoint> key_points_;

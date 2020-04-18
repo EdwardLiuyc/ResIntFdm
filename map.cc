@@ -7,7 +7,7 @@ namespace fdm {
 constexpr size_t kGoodMatchMinCount = 200;
 
 void Map::InsertNewFrame(const cv::Mat& image) {
-  auto new_frame = std::make_shared<Frame>(image);
+  auto new_frame = std::make_shared<Frame>(image, this);
 
   if (!frames_.empty()) {
     const int size = frames_.size();

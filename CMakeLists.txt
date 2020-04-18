@@ -25,6 +25,24 @@ find_package(Boost REQUIRED
   filesystem)
 link_libraries(${Boost_LIBRARIES})
 
+option(USE_TBB "Enable TBB?" OFF) #set to OFF to disable
+if(USE_TBB)
+  find_package(TBB)
+  if(TBB_FOUND)
+    message(STATUS "TBB version: ${TBB_INTERFACE_VERSION}")
+    include_directories(${TBB_INCLUDE_DIRS})
+    list(APPEND require_libs ${TBB_LIBRARIES})
+    add_definitions(-D_USE_TBB_)
+  endif(TBB_FOUND)
+endif(USE_TBB)
+
+find_package(CUDA)
+if (CUDA_FOUND)
+  message(STATUS "CUDA found. CudaSift will be built.")
+  add_definitions("-D_USE_CUDA_")
+  add_subdirectory(third_parties/CudaSift)
+endif(CUDA_FOUND)
+
 enable_testing()
 add_subdirectory(third_parties/googletest)
 add_subdirectory(tests)
