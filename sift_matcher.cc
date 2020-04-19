@@ -19,6 +19,28 @@ void SiftMatcher::Match(const std::shared_ptr<Frame>& frame1,
       std::chrono::duration_cast<std::chrono::microseconds>(end - start)
           .count();
   std::cout << duration << " us" << std::endl;
+
+#ifdef _USE_CUDA_
+  // MatchSiftData(frame1->DescriptorCuda(), frame2->DescriptorCuda());
+  // float homography[9];
+  // int numMatches;
+  // FindHomography(frame1->DescriptorCuda(), homography, &numMatches, 10000,
+  //                0.00f, 0.80f, 5.0);
+  // int numFit = ImproveHomography(frame1->DescriptorCuda(), homography, 5,
+  // 0.00f,
+  //                                0.80f, 3.0);
+
+  // std::cout << "Number of original features: "
+  //           << frame1->DescriptorCuda().numPts << " "
+  //           << frame2->DescriptorCuda().numPts << std::endl;
+  // std::cout << "Number of matching features: " << numFit << " " << numMatches
+  //           << " "
+  //           << 100.0f * numFit /
+  //                  std::min(frame1->DescriptorCuda().numPts,
+  //                           frame2->DescriptorCuda().numPts)
+  //           << "% " << std::endl;
+#endif
+
   //-- Filter matches using the Lowe's ratio test
   const float ratio_thresh = 0.7f;
   std::vector<cv::DMatch> lowe_filtered_matches;
@@ -34,7 +56,13 @@ void SiftMatcher::Match(const std::shared_ptr<Frame>& frame1,
 
   std::cout << "filtered match size: " << lowe_filtered_matches.size()
             << std::endl;
+  FilterMatchesUsingEssentialMatrix(points1, points2, lowe_filtered_matches);
+}
 
+void SiftMatcher::FilterMatchesUsingEssentialMatrix(
+    const std::vector<cv::Point2f>& points1,
+    const std::vector<cv::Point2f>& points2,
+    const std::vector<cv::DMatch>& matches) {
   // [[4.76529213e+03 0.00000000e+00 1.87956718e+03]
   //  [0.00000000e+00 4.75245199e+03 1.01316490e+03]
   //  [0.00000000e+00 0.00000000e+00 1.00000000e+00]]
@@ -51,7 +79,7 @@ void SiftMatcher::Match(const std::shared_ptr<Frame>& frame1,
                        fundamental_status);
   for (size_t i = 0; i < points1.size(); ++i) {
     if (fundamental_status[i] != 0) {
-      good_matches_.push_back(lowe_filtered_matches[i]);
+      good_matches_.push_back(matches[i]);
     }
   }
 }

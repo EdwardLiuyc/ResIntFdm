@@ -19,6 +19,12 @@ class SiftMatcher {
     return good_matches_;
   }
 
+ protected:
+  void FilterMatchesUsingEssentialMatrix(
+      const std::vector<cv::Point2f>& points1,
+      const std::vector<cv::Point2f>& points2,
+      const std::vector<cv::DMatch>& matches);
+
  private:
   cv::Ptr<cv::DescriptorMatcher> matcher_;
   std::vector<cv::DMatch> good_matches_;

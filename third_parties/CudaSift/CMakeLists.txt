@@ -29,11 +29,12 @@ set(cuda_sources
   cudaSiftD.h  
   cudaSift.h  
   cudautils.h
+  geomFuncs.h 
+  geomFuncs.cpp  
 )
 cuda_add_library(cuda_sift ${cuda_sources})
 
 set(sources
-  geomFuncs.cpp  
   mainSift.cpp  
 )
 

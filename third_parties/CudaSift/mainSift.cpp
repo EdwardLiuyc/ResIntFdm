@@ -10,11 +10,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "cudaImage.h"
-#include "cudaSift.h"
+#include "geomFuncs.h"
 
-int ImproveHomography(SiftData &data, float *homography, int numLoops,
-                      float minScore, float maxAmbiguity, float thresh);
 void PrintMatchData(SiftData &siftData1, SiftData &siftData2, CudaImage &img);
 void MatchAll(SiftData &siftData1, SiftData &siftData2, float *homography);
 
